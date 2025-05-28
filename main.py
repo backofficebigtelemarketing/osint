@@ -16,6 +16,7 @@ def advanced_search(request: Request, input_data: str = Form(...)):
         f"https://www.google.com/search?q={input_data}",
         f"https://www.bing.com/search?q={input_data}",
         f"https://yandex.com/search/?text={input_data}",
+        f"https://www.linkedin.com/search/?text={input_data}",
         f"https://duckduckgo.com/?q={input_data}",
         f"https://namechk.com/{input_data}",
         f"https://whatsmyname.app/",
