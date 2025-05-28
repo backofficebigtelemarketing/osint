@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Risultati OSINT</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">Risultati per: {{ query }}</h2>
+    <ul class="space-y-2">
+      {% for link in results %}
+        <li class="bg-gray-800 p-4 rounded shadow"><a href="{{ link }}" target="_blank" class="text-blue-400 hover:underline">{{ link }}</a></li>
+      {% endfor %}
+    </ul>
+    <div class="mt-8">
+      <a href="/" class="text-yellow-400 hover:underline">⬅️ Torna alla Home</a>
+    </div>
+  </div>
+</body>
+</html>
