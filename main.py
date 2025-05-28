@@ -24,8 +24,6 @@ def advanced_search(request: Request, input_data: str = Form(...)):
         f"https://whatsmyname.app/",
         f"https://epieos.com/?q={input_data}",
         f"https://who.is/whois/{input_data}",
-        f"https://hunter.io/search/{input_data}",
         f"https://shodan.io/search?query={input_data}",
-        f"https://intelx.io/?s={input_data}"
     ]
     return templates.TemplateResponse("results.html", {"request": request, "results": links, "query": input_data})
