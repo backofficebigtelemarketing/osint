@@ -1,7 +1,11 @@
+from flask import Flask
 import requests
 from bs4 import BeautifulSoup
 import schedule
 import time
+import threading
+
+app = Flask(__name__)
 
 def get_product_data(url):
     headers = {
@@ -30,8 +34,20 @@ def job():
     for product in products:
         print(f"Nome: {product['name']}, Prezzo: {product['price']}")
 
-schedule.every().day.at("09:00").do(job)
+# Funzione per eseguire job di scraping periodicamente in un thread separato
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+@app.route('/')
+def index():
+    return "Scraping in corso... Guarda i log!"
+
+if __name__ == '__main__':
+    # Start del job di scraping in background
+    schedule.every().day.at("09:00").do(job)
+    threading.Thread(target=run_schedule, daemon=True).start()
+
+    # Avvio del server Flask
+    app.run(host="0.0.0.0", port=5000)
