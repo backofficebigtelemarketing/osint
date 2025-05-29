@@ -34,10 +34,13 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form['query']
+    print("Query di ricerca:", query)  # Aggiungi debug per vedere la query
+    
     products = get_product_data('https://www.amazon.it/s?k=telefonia')  # URL di ricerca
     filtered_products = [product for product in products if query.lower() in product['name'].lower()]
+    
+    print("Prodotti filtrati:", filtered_products)  # Aggiungi debug per vedere i prodotti filtrati
     return render_template('index.html', products=filtered_products)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)  # Usa 5000 per Render
-
+    app.run(debug=True)
