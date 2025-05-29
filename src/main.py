@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 import requests
 from bs4 import BeautifulSoup
 import schedule
@@ -7,6 +7,7 @@ import threading
 
 app = Flask(__name__)
 
+# Funzione di scraping
 def get_product_data(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -28,26 +29,40 @@ def get_product_data(url):
             continue
     return product_list
 
+# Job di scraping (periodico)
 def job():
     url = "https://www.amazon.it/s?k=smartphone"
     products = get_product_data(url)
-    for product in products:
-        print(f"Nome: {product['name']}, Prezzo: {product['price']}")
+    return products
 
-# Funzione per eseguire job di scraping periodicamente in un thread separato
+# Rotta principale (per visualizzare la dashboard)
+@app.route('/')
+def index():
+    products = job()  # Ottenere i prodotti dallo scraping
+    return render_template('index.html', products=products)
+
+# Rotta di ricerca (con filtri)
+@app.route('/search', methods=['POST'])
+def search():
+    query = request.form['query']
+    price_filter = request.form['price']
+    products = job()
+
+    # Filtrare i prodotti in base alla ricerca
+    filtered_products = [product for product in products if query.lower() in product['name'].lower()]
+
+    if price_filter:
+        filtered_products = [product for product in filtered_products if product['price'] == price_filter]
+
+    return render_template('index.html', products=filtered_products)
+
+# Funzione per eseguire il job di scraping ogni giorno
 def run_schedule():
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-@app.route('/')
-def index():
-    return "Scraping in corso... Guarda i log!"
-
 if __name__ == '__main__':
-    # Start del job di scraping in background
     schedule.every().day.at("09:00").do(job)
     threading.Thread(target=run_schedule, daemon=True).start()
-
-    # Avvio del server Flask
     app.run(host="0.0.0.0", port=5000)
