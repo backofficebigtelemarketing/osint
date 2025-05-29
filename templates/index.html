@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motore di Ricerca Prodotti</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Motore di Ricerca per Prodotti in Offerta</h1>
+
+    <!-- Form di ricerca con filtri -->
+    <form method="POST" action="/search">
+        <input type="text" name="query" placeholder="Cerca prodotto..." required>
+        <button type="submit">Cerca</button>
+    </form>
+
+    <h2>Risultati</h2>
+    <!-- Tabella dei risultati -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nome Prodotto</th>
+                <th>Prezzo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
