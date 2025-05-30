@@ -25,10 +25,18 @@ def get_product_data(url):
     return product_list
 
 # Rotta principale per visualizzare i prodotti
-@app.route('/')
-def index():
-    products = get_product_data('https://www.amazon.it/s?k=telefonia')  # esempio URL di ricerca
-    return render_template('index.html', products=products)
+@app.route('/search', methods=['POST'])
+def search():
+    query = request.form['query']
+    print(f"Query di ricerca: {query}")  # Stampa la query per il debug
+    products = get_product_data('https://www.amazon.it/s?k=telefonia')  # URL di ricerca
+    filtered_products = [product for product in products if query.lower() in product['name'].lower()]
+    
+    # Stampa i prodotti filtrati
+    print(f"Prodotti filtrati: {filtered_products}")
+    
+    return render_template('index.html', products=filtered_products)
+
 
 # Rotta di ricerca per filtrare i prodotti
 @app.route('/search', methods=['POST'])
