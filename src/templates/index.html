@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motore di Ricerca Prodotti</title>
+    <title>Motore di Ricerca Prezzi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,32 +55,29 @@
         table td {
             background-color: #ffffff;
         }
-        .no-results {
-            text-align: center;
-            font-size: 18px;
-            color: #888;
-        }
     </style>
 </head>
 <body>
-    <h1>Motore di Ricerca per Prodotti in Offerta</h1>
+    <h1>Motore di Ricerca per Prezzi dei Prodotti</h1>
 
     <!-- Form di ricerca con filtri -->
     <div class="search-form">
         <form method="POST" action="/search">
-            <input type="text" name="query" placeholder="Cerca prodotto..." required>
+            <input type="text" name="query" placeholder="Cerca un prodotto..." required>
             <button type="submit">Cerca</button>
         </form>
     </div>
 
     {% if products %}
-        <h2>Risultati</h2>
+        <h2>Risultati per "{{ query }}"</h2>
         <!-- Tabella dei risultati -->
         <table>
             <thead>
                 <tr>
                     <th>Nome Prodotto</th>
                     <th>Prezzo</th>
+                    <th>Negozio</th>
+                    <th>Link</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,12 +85,14 @@
                 <tr>
                     <td>{{ product.name }}</td>
                     <td>{{ product.price }}</td>
+                    <td>{{ product.store }}</td>
+                    <td><a href="{{ product.url }}" target="_blank">Vai al prodotto</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p class="no-results">Nessun risultato trovato. Prova una ricerca diversa.</p>
+        <p>Nessun risultato trovato per "{{ query }}". Prova con un altro prodotto.</p>
     {% endif %}
 </body>
 </html>
